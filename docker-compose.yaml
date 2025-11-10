@@ -1,14 +1,39 @@
 version: "3.9"
+
+
 services:
   db:
-    image: postgis/postgis:17-3.4  # PostgreSQL 17 + PostGIS 3.4
+    image: postgis/postgis:17-3.4
     container_name: postgis_db
     restart: always
-    environment:
-      POSTGRES_DB: gisdb
-      POSTGRES_USER: gisuser
-      POSTGRES_PASSWORD: secret
+    env_file: .env
     ports:
       - "5432:5432"
     volumes:
       - ./pgdata:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d
+
+
+  api:
+    build: ./backend
+    container_name: postgis_api
+    restart: always
+    env_file: .env
+    depends_on:
+      - db
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/app:/app/app
+
+
+gdal:
+  image: osgeo/gdal:alpine-small-latest
+  container_name: postgis_gdal
+  depends_on:
+    - db
+  # keep the container around so scripts can exec into it
+  entrypoint: ["sleep", "infinity"]
+  volumes:
+    - ./data:/data
+  env_file: .env
