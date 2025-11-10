@@ -24,3 +24,8 @@ ogr2ogr -f "PostgreSQL" PG:"dbname=gisdb user=gisuser password=secret host=local
 pip install fastapi uvicorn asyncpg geoalchemy2 sqlalchemy
 ```
 
+## Run backend
+```
+uvicorn main:app --reload
+```
+
