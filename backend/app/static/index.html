@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>서울시 행정구역 시각화 (PostGIS + Leaflet)</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+      html, body, #map { height: 100%; margin: 0; }
+      .panel { position: absolute; top: 10px; left: 10px; background: #fff; padding: 8px 10px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,.15);}
+      .panel input { width: 120px; }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div class="panel">
+      <div><b>Point in Polygon</b></div>
+      <div>Lng <input id="lng" value="126.9780"/> Lat <input id="lat" value="37.5665"/></div>
+      <button id="btn">Check</button>
+      <div id="result" style="margin-top:6px;color:#1f6feb"></div>
+    </div>
+    <script>
+      const map = L.map('map').setView([37.5665, 126.9780], 11);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+
+
+      // draw districts
+      fetch('/districts')
+        .then(r => r.json())
+        .then(fc => {
+          L.geoJSON(fc, {
+          style: { weight: 1 },
+          onEachFeature: (feature, layer) => {
+            layer.bindPopup(feature.properties.name);
+          }
+        }).addTo(map);
+      });
+
+
+  // point-in-polygon demo
+  const btn = document.getElementById('btn');
+  const res = document.getElementById('result');
+
+
+  btn.onclick = () => {
+    const lng = parseFloat(document.getElementById('lng').value);
+    const lat = parseFloat(document.getElementById('lat').value);
+    fetch(`/contains?lng=${lng}&lat=${lat}`)
+      .then(r => r.json())
+      .then(j => {
+      res.textContent = j.district ? `해당 좌표는 ${j.district} 에 속합니다.` : '어느 구에도 속하지 않습니다.';
+      L.circleMarker([lat, lng]).addTo(map);
+    });
+  };
+</script>
+</body>
+</html>
