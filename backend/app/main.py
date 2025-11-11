@@ -23,10 +23,6 @@ app.add_middleware(
 )
 
 
-# serve static demo page
-app.mount("/", StaticFiles(directory="app/static", html=True), name="static")
-
-
 @app.get("/health")
 async def health():
   return {"status": "ok"}
@@ -74,3 +70,7 @@ async def nearest(
   if not row:
     return {"district": None}
   return {"district": row.name, "distance_m": row.meters}
+
+
+# server static page
+app.mount("/", StaticFiles(directory="app/static", html=True), name="static")
