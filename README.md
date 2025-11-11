@@ -29,3 +29,20 @@ pip install fastapi uvicorn asyncpg geoalchemy2 sqlalchemy
 uvicorn main:app --reload
 ```
 
+## start App in a nutshell
+```
+make up
+make fetch
+make load
+
+# check
+make health
+
+# open browser
+http://localhost:8000
+```
+
+## useful command
+```
+```
+
