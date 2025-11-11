@@ -44,5 +44,19 @@ http://localhost:8000
 
 ## useful command
 ```
+# db connect
+make db-psql
+
+# make space index
+make reindex
+
+# tail log
+make logs
+
+# tail api log only
+make api-logs
+
+# clean data 
+make clean
 ```
 
