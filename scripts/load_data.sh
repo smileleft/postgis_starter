@@ -2,9 +2,9 @@
 set -euo pipefail
 
 
-: "${POSTGRES_DB:?}"
-: "${POSTGRES_USER:?}"
-: "${POSTGRES_PASSWORD:?}"
+: "${POSTGRES_DB:=gisdb}"
+: "${POSTGRES_USER:=gisuser}"
+: "${POSTGRES_PASSWORD:=secret}"
 : "${POSTGRES_HOST:=db}"
 : "${POSTGRES_PORT:=5432}"
 
