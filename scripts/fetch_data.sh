@@ -9,12 +9,12 @@ OUT="data/seoul_municipalities.geojson"
 
 
 if command -v curl >/dev/null 2>&1; then
-curl -L "$URL" -o "$OUT"
+  curl -L "$URL" -o "$OUT"
 elif command -v wget >/dev/null 2>&1; then
-wget "$URL" -O "$OUT"
+  wget "$URL" -O "$OUT"
 else
-echo "Please install curl or wget." >&2
-exit 1
+  echo "Please install curl or wget." >&2
+  exit 1
 fi
 
 
